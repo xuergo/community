@@ -73,13 +73,20 @@
         </dependency>
 
 
-
         <!--springboot mybatis -->
         <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.0.1</version>
+        </dependency>
+
+        <!--热部署-->
+        <!--Spring 官方提供的热部署插件 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
 
 
@@ -93,5 +100,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

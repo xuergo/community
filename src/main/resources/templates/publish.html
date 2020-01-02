@@ -17,9 +17,8 @@
                     data-target="#bs-example-navbar-collapse-1"
                     aria-expanded="false">
                 <span class="sr-only">Giao哥社区</span>
-
             </button>
-            <a class="navbar-brand" href="#">Giao哥社区</a>
+            <a class="navbar-brand" href="/">Giao哥社区</a>
         </div>
 
 
@@ -33,12 +32,14 @@
             </form>
 
             <ul class="nav navbar-nav navbar-right">
-                <li th:if="${session.user==null}"><a href="https://github.com/login/oauth/authorize?client_id=0f2fb045fbcf39fe3fff&redirect_uri=http://localhost:8887/callback
-&scope=user&state=1">登录</a></li>
+                <li>
+                    <a href="/publish">发贴</a>
+                </li>
+
                 <li class="dropdown" th:if="${session.user!=null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false"
-                       th:text="${session.user.getName()}"><span class="caret"></span></a>
+                       th:text="${session.user.name}"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Action</a></li>
                         <li><a href="#">Another action</a></li>
@@ -47,6 +48,9 @@
                         <li><a href="#">Separated link</a></li>
                     </ul>
                 </li>
+
+                <li th:if="${session.user==null}"><a href="https://github.com/login/oauth/authorize?client_id=0f2fb045fbcf39fe3fff&redirect_uri=http://localhost:8887/callback
+&scope=user&state=1">登录</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -59,19 +63,24 @@
             <h2><span class=" glyphicon glyphicon glyphicon-pencil"
                       aria-hidden="true"></span> 提问</h2>
             <hr/>
-            <form active="/publish">
+            <form active="/publish" method="post">
                 <div class="form-group">
                     <label for="title">问题标题</label>
-                    <input type="text" name="title" class="form-control" id="title" placeholder="问题标题">
+                    <input type="text" name="title" class="form-control" id="title" placeholder="问题标题"
+                           th:value="${title}">
                 </div>
                 <div class="form-group">
                     <label for="title">问题详情 </label>
-                    <textarea name="description" id="description" class="form-control" rows="10" cols="30"></textarea>
+                    <textarea name="description" id="description" class="form-control" rows="10" cols="30"
+                              th:text="${description}"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="title">添加标签 </label>
-                    <input type="text" name="tag" id="tag" class="form-control" placeholder="输入标签以 ， 分隔">
+                    <input type="text" name="tag" id="tag" class="form-control" placeholder="输入标签以 ， 分隔"
+                           th:value="${tag}">
                 </div>
+                <!--错误信息 -->
+                <span class="alert alert-dange" th:text="${erro}" th:if="${erro!=null}"></span>
                 <button type="submit" class="btn btn-success btn-publish">发布</button>
             </form>
         </div>

@@ -48,7 +48,7 @@ public class AuthorizeController {
         GithubUser githubUser = githubProvider.getUser(accessToken);
         System.out.println(githubUser);
         // githubUser 是否为空 判断是否登录成功
-        if (githubUser != null) {
+        if (githubUser != null&&githubUser.getName()!="") {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
