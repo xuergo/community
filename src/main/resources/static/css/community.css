@@ -10,5 +10,14 @@ body{
 .btn-publish{
 	float:right ;
 	margin-bottom: 15px;
-	
+
+}
+
+.media-object-img{
+	width: 45px;
+}
+
+.text-desc{
+	color: #E6E6E6;
+	font-size: 13px;
 }
