@@ -1,5 +1,6 @@
 package com.xuxiang.community.controller;
 
+import com.xuxiang.community.dto.PageinationDto;
 import com.xuxiang.community.dto.QuestionDto;
 import com.xuxiang.community.mapper.UserMapper;
 import com.xuxiang.community.model.Question;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +27,10 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
-                        Model model) {
+                        Model model,
+                        @RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "size", defaultValue = "2") Integer size) {
+        //验证是否登录 登录cook持久化
         if (request.getCookies() != null && request.getCookies().length != 0) {
             Cookie cookies[] = request.getCookies();
             for (Cookie cookie : cookies) {
@@ -40,9 +45,10 @@ public class IndexController {
             }
         }
 
-        List<QuestionDto> questionList = questionService.list();
 
-        model.addAttribute("questions", questionList);
+
+        PageinationDto pageination = questionService.list(page, size);
+        model.addAttribute("pageination", pageination);
         return "index";
     }
 }

@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title th:text="${sectionName}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="/js/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/community.css">
+
+
 </head>
 <body>
-$END$
+
+<div th:insert="~{navigation.html :: nav}"></div>
+
+<div class="container-fluid main">
+    <div class="row ">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h3><span th:text="${sectionName}"></span></h3>
+            <hr/>
+
+            <div class="media" th:each="question:${questions}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-rounded media-object-img"
+                             th:src="${question.user.avatarUrl}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                    <span th:text="${question.description}"></span>
+                    <br>
+                    <span class="text-desc" th:text="${question.commentCount}"></span> <span
+                        class="text-desc">个回复 ·</span>
+                    <span class="text-desc" th:text="${question.viewCount}"></span> <span class="text-desc">个浏览 ·</span>
+                    <span class="text-desc" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-lg-3  col-md-12 col-sm-12 col-xs-12">
+            <div class="list-group profile-div">
+                <a href=" /profile/questions"
+                   th:class="${section =='questions'}? 'active list-group-item':'list-group-item' ">我的问题</a>
+                <a href="/profile/replies"
+                   th:class="${section == 'replies'}?'active list-group-item':'list-group-item'">
+                    最新回复<span class="badge">14</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>

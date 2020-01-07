@@ -3,58 +3,16 @@
 <head>
     <title>Giao哥社区</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="js/jquery-3.4.1.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
     <link rel="stylesheet" href="css/community.css">
 
+
 </head>
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1"
-                    aria-expanded="false">
-                <span class="sr-only">Giao哥社区</span>
-
-            </button>
-            <a class="navbar-brand" href="/">Giao哥社区</a>
-        </div>
-
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-            <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="输入想giao的问题">
-                </div>
-                <button type="submit" class="btn btn-default">搜索</button>
-            </form>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="/publish">发贴</a>
-                </li>
-                <li class="dropdown" th:if="${session.user!=null}">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false"
-                       th:text="${session.user.name}"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">消息中心</a></li>
-                        <li><a href="#">个人资料</a></li>
-                        <li><a href="#">退出登录</a></li>
-                    </ul>
-                </li>
-                <li th:if="${session.user==null}">
-                    <a href="https://github.com/login/oauth/authorize?client_id=0f2fb045fbcf39fe3fff&redirect_uri=http://localhost:8887/callback&scope=user&state=1">
-                        登录</a>
-                </li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
+<div th:insert="~{navigation.html :: nav}"></div>
 
 
 <div class="container-fluid main">
@@ -63,7 +21,7 @@
             <h3><span class="glyphicon glyphicon glyphicon-tasks" aria-hidden="true"></span>发现</h3>
             <hr/>
 
-            <div class="media" th:each="question:${questions}">
+            <div class="media" th:each="question:${pageination.question}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded media-object-img"
@@ -75,12 +33,45 @@
                     <span th:text="${question.description}"></span>
                     <br>
                     <span class="text-desc" th:text="${question.commentCount}"></span> <span
-                        class="text-desc">个回复 ·</span>
+                        class="text-desc">个回复 ·</span>`
                     <span class="text-desc" th:text="${question.viewCount}"></span> <span class="text-desc">个浏览 ·</span>
                     <span class="text-desc" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
                 </div>
             </div>
 
+            <!--分页-->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+
+                    <li>
+                        <a href="#" aria-label="Previous" th:if="${pageination.showFirstPage}" th:href="@{/(page=1)}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" aria-label="Previous" th:if="${pageination.showPrevious}" th:href="@{/(page=${(pageination.page)-1})}">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+
+                    <li th:each="page:${pageination.pages}" th:class="${pageination.page==page}?active:''"><a
+                            th:href="@{/(page=${page})}"
+                            th:text="${page}"></a></li>
+
+                    <li>
+                        <a href="#" aria-label="Next" th:if="${pageination.showNext}" th:href="@{/(page=${(pageination.page)+1})}" >
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" aria-label="Next" th:if="${pageination.showEndPage}"  th:href="@{/(page=${pageination.tootlePage})}">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
         </div>
         <div class="col-lg-3  col-md-12 col-sm-12 col-xs-12">
