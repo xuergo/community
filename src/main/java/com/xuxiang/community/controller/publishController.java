@@ -1,10 +1,8 @@
 package com.xuxiang.community.controller;
 
 import com.xuxiang.community.mapper.QuestionMapper;
-import com.xuxiang.community.mapper.UserMapper;
 import com.xuxiang.community.model.Question;
 import com.xuxiang.community.model.User;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -20,8 +17,6 @@ public class publishController {
 
     @Autowired
     private QuestionMapper questionMapper;
-    @Autowired
-    private UserMapper userMapper;
 
     @GetMapping("/publish")
     public String publish() {
@@ -51,22 +46,7 @@ public class publishController {
         }
 
         //验证是否登录
-        User user = null;
-        if (request.getCookies() != null && request.getCookies().length != 0) {
-            Cookie cookies[] = request.getCookies();
-            for (Cookie cookie : cookies) {
-                String tokenid = cookie.getName();
-                if (tokenid.equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                }
-            }
-        }
-
-
+        User user =(User) request.getSession().getAttribute("user");
         if (user == null) {
             model.addAttribute("erro", "没有登录");
             return "publish";

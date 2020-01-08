@@ -21,12 +21,9 @@ public class QuestionService {
     private UserMapper userMapper;
 
     public PageinationDto list(Integer page, Integer size) {
-
-
         Integer tootle = questionMapper.pageTootl(); //总条数
         PageinationDto pageinationDto = new PageinationDto();
         pageinationDto.setPageination(tootle, page, size);
-
 
         //防止sql出错
         if (page < 1) {
@@ -57,11 +54,25 @@ public class QuestionService {
 
 
     //我的问题
-    public List<QuestionDto> listById(Integer UserId) {
+    public PageinationDto listById(Integer page, Integer size, Integer userId) {
 
-        List<Question> list = questionMapper.listById(UserId);
+        Integer tootle = questionMapper.pageTootlById(userId); //总条数
+        PageinationDto pageinationDto = new PageinationDto();
+        pageinationDto.setPageination(tootle, page, size);
+
+        //防止sql出错
+        if (page < 1) {
+            page = 1;
+        }
+        if (page > pageinationDto.getTootlePage()) {
+            page = pageinationDto.getTootlePage();
+        }
+
+
+        Integer offset = size * (page - 1);//公式 开始条数=size*(page-1)
+        List<Question> questions = questionMapper.listById(offset, size, userId);//页面数据
         List<QuestionDto> questionDtolist = new ArrayList<QuestionDto>();
-        for (Question question : list) {
+        for (Question question : questions) {
             User user = userMapper.findById(question.getCreator());
             QuestionDto questionDto = new QuestionDto();
             BeanUtils.copyProperties(question, questionDto); //spring 给的方法 可直接将一个对象的值赋给 另一个对象
@@ -69,9 +80,20 @@ public class QuestionService {
             questionDtolist.add(questionDto);
         }
 
-        return questionDtolist;
+        pageinationDto.setQuestion(questionDtolist);
+        return pageinationDto;
+
 
     }
 
 
+    public QuestionDto getById(Integer id) {
+        Question question =questionMapper.getById(id);
+        QuestionDto questionDto = new QuestionDto();
+
+        BeanUtils.copyProperties(question, questionDto); //spring 给的方法 可直接将一个对象的值赋给 另一个对象
+        User user = userMapper.findById(question.getCreator());
+        questionDto.setUser(user);
+        return questionDto;
+    }
 }
