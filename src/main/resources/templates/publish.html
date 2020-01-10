@@ -3,10 +3,11 @@
 <head>
     <title>Giao哥社区</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <script src="js/bootstrap.min.js" type="application/javascript"></script>
-    <link rel="stylesheet" href="css/community.css">
+    <script src="/js/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/community.css">
 </head>
 <body>
 <div th:insert="~{navigation.html :: nav}"></div>
@@ -18,7 +19,9 @@
             <h2><span class=" glyphicon glyphicon glyphicon-pencil"
                       aria-hidden="true"></span> 提问</h2>
             <hr/>
-            <form active="/publish" method="post">
+
+            <form action="/publish" method="post">
+                <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
                     <label for="title">问题标题</label>
                     <input type="text" name="title" class="form-control" id="title" placeholder="问题标题"
@@ -38,6 +41,7 @@
                 <span class="alert alert-dange" th:text="${erro}" th:if="${erro!=null}"></span>
                 <button type="submit" class="btn btn-success btn-publish">发布</button>
             </form>
+
         </div>
         <div class="col-lg-3  col-md-12 col-sm-12 col-xs-12">
             <h3>阿giao百科</h3>

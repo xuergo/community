@@ -30,8 +30,6 @@ public class ProfileController {
                           Model model) {
 
         //验证是否登录 登录cook持久化
-
-
         User user =(User) request.getSession().getAttribute("user");
         if (user == null) {
             return "redirect:/";//重定向

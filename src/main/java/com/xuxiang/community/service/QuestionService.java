@@ -88,12 +88,25 @@ public class QuestionService {
 
 
     public QuestionDto getById(Integer id) {
-        Question question =questionMapper.getById(id);
+        Question question = questionMapper.getById(id);
         QuestionDto questionDto = new QuestionDto();
 
         BeanUtils.copyProperties(question, questionDto); //spring 给的方法 可直接将一个对象的值赋给 另一个对象
         User user = userMapper.findById(question.getCreator());
         questionDto.setUser(user);
         return questionDto;
+    }
+
+
+    public void creatorUpdate(Question question) {
+        //更新
+        if (question.getId() != null) {
+            questionMapper.updateByid(question);
+        }
+
+        //插入
+        if (question.getId() == null) {
+            questionMapper.creat(question);
+        }
     }
 }

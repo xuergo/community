@@ -5,6 +5,7 @@ import com.xuxiang.community.dto.GithubUser;
 import com.xuxiang.community.mapper.UserMapper;
 import com.xuxiang.community.model.User;
 import com.xuxiang.community.procider.GithubProvider;
+import com.xuxiang.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,9 @@ public class AuthorizeController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
@@ -48,17 +52,14 @@ public class AuthorizeController {
         GithubUser githubUser = githubProvider.getUser(accessToken);
         System.out.println(githubUser);
         // githubUser 是否为空 判断是否登录成功
-        if (githubUser != null&&githubUser.getName()!="") {
+        if (githubUser != null && githubUser.getName() != "") {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-
-            userMapper.insert(user);
+            userService.creatOrUpdateUser(user);
             response.addCookie(new Cookie("token", token));
 
             return "redirect:/";//重定向

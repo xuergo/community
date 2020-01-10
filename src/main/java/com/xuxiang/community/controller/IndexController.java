@@ -8,6 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 public class IndexController {
 
@@ -28,4 +32,18 @@ public class IndexController {
         model.addAttribute("pageination", pageination);
         return "index";
     }
+
+    //退出登录
+    @GetMapping("/quit")
+    public String quit(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "redirect:/";//重定向
+    }
+
 }
